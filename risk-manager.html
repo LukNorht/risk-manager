@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk Manager — Charles Schwab</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-page:#f5f5f3;--bg-card:#fff;--bg-surface:#efefec;--bg-hover:#e8e8e5;
+  --text-primary:#1a1a1a;--text-muted:#888;--text-hint:#bbb;
+  --border:#e0e0e0;--border-light:#eee;
+  --tab-bg:#e8f0fb;--tab-color:#185fa5;--tab-border:#b3cef0;
+  --btn-bg:#fff;--btn-color:#555;
+}
+body.dark{
+  --bg-page:#0d0d0d;--bg-card:#1c1c1c;--bg-surface:#222;--bg-hover:#2a2a2a;
+  --text-primary:#f0f0f0;--text-muted:#666;--text-hint:#444;
+  --border:#2e2e2e;--border-light:#252525;
+  --tab-bg:#0f2540;--tab-color:#5ba4f5;--tab-border:#1e4a80;
+  --btn-bg:#1c1c1c;--btn-color:#bbb;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);padding:1.2rem;transition:background .25s,color .25s;min-height:100vh}
+.wrap{max-width:920px;margin:0 auto}
+.history-entry {
+  border: 1px solid var(--border);
+  padding: 8px;
+  margin: 6px 0;
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+.history-entry p {
+  margin: 2px 0;
+  color: var(--text-primary);
+}
+
+/* HEADER */
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem;gap:12px}
+.htitle{font-size:19px;font-weight:500;color:var(--text-primary);margin-bottom:3px}
+.hsub{font-size:13px;color:var(--text-muted)}
+.sw{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-top:4px;cursor:pointer}
+.sw span{font-size:12px;color:var(--text-muted);user-select:none}
+.sw-track{width:44px;height:24px;border-radius:12px;background:var(--bg-surface);border:0.5px solid var(--border);position:relative;transition:background .2s}
+body.dark .sw-track{background:#1a3a5c;border-color:#1e4a80}
+.sw-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#888;transition:transform .2s,background .2s}
+body.dark .sw-thumb{transform:translateX(20px);background:#5ba4f5}
+.sw-ico{font-size:11px;position:absolute;top:50%;transform:translateY(-50%);pointer-events:none}
+.sw-sun{left:5px}.sw-moon{right:4px}
+
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:1.2rem;flex-wrap:wrap}
+.tab{padding:7px 15px;border-radius:8px;border:0.5px solid var(--border);font-size:13px;cursor:pointer;background:var(--btn-bg);color:var(--text-muted);transition:background .15s}
+.tab.active{background:var(--tab-bg);color:var(--tab-color);border-color:var(--tab-border);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+
+/* GRIDS */
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:1.1rem}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:1.1rem}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:1.1rem}
+
+/* METRICS */
+.met{background:var(--bg-surface);border-radius:8px;padding:11px;transition:background .2s}
+.met .ml{font-size:11px;color:var(--text-muted);margin-bottom:3px}
+.met .mv{font-size:19px;font-weight:500;color:var(--text-primary)}
+
+/* SECTION */
+.sec{margin-bottom:1.3rem}
+.stitle{font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+
+/* CARD */
+.card{background:var(--bg-card);border:0.5px solid var(--border);border-radius:12px;padding:.9rem 1rem;margin-bottom:9px}
+.rl{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border-light);font-size:13px}
+.rl:last-child{border-bottom:none}
+.rl .k{color:var(--text-muted)}
+
+/* SLIDERS */
+.sr{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sr label{font-size:13px;color:var(--text-muted);min-width:160px}
+.sr input[type=range]{flex:1;accent-color:#378ADD}
+.sr .sv{font-size:13px;font-weight:500;min-width:56px;text-align:right;color:var(--text-primary)}
+.bar-bg{background:var(--bg-surface);border-radius:4px;height:7px;overflow:hidden}
+.bar-fill{height:7px;border-radius:4px;transition:width .3s}
+
+/* SHARED PARAMS */
+.params-box{background:var(--bg-surface);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.2rem;border:1.5px solid var(--tab-border)}
+.params-header{font-size:11px;font-weight:500;color:var(--tab-color);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.params-header::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--tab-color);flex-shrink:0}
+
+/* OPS BUTTONS ROW */
+.ops-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.op-slot{width:52px;height:52px;border-radius:10px;border:0.5px solid var(--border);background:var(--bg-card);font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-direction:column;gap:2px}
+.op-slot .op-label{font-size:10px;color:var(--text-muted)}
+.op-slot.win{background:#0e2e16;border-color:#1D9E75}
+.op-slot.loss{background:#2e0e0e;border-color:#E24B4A}
+.op-slot.be{background:#2e1e00;border-color:#BA7517}
+.op-slot.pending{background:var(--bg-surface);opacity:.4}
+body:not(.dark) .op-slot.win{background:#EAF3DE;border-color:#3B6D11}
+body:not(.dark) .op-slot.loss{background:#FCEBEB;border-color:#A32D2D}
+body:not(.dark) .op-slot.be{background:#FAEEDA;border-color:#854F0B}
+
+/* CONTROL BUTTONS */
+.ctrl-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem}
+.cbtn{padding:7px 13px;border-radius:8px;border:0.5px solid var(--border);font-size:13px;cursor:pointer;background:var(--btn-bg);color:var(--btn-color);transition:background .15s;user-select:none}
+.cbtn:hover{background:var(--bg-hover)}
+.cbtn.sel{background:var(--tab-bg);color:var(--tab-color);border-color:var(--tab-border);font-weight:500}
+.cbtn.close-btn{background:#EAF3DE;color:#3B6D11;border-color:#5DCAA5;font-weight:500}
+body.dark .cbtn.close-btn{background:#0e2e16;color:#5DCAA5;border-color:#1D9E75}
+
+/* INFO BOX */
+.ibox{background:var(--bg-surface);border-radius:12px;padding:12px 14px}
+.ir{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:0.5px solid var(--border)}
+.ir:last-child{border-bottom:none}
+.ir .k{color:var(--text-muted)}
+
+/* STATUS BAR */
+.sbar{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;margin-top:10px;text-align:center}
+.sbar.ok{background:#EAF3DE;color:#3B6D11}
+.sbar.bad{background:#FCEBEB;color:#A32D2D}
+.sbar.warn{background:#FAEEDA;color:#854F0B}
+.sbar.neutral{background:var(--bg-surface);color:var(--text-muted)}
+body.dark .sbar.ok{background:#0e2e16;color:#5DCAA5}
+body.dark .sbar.bad{background:#2e0e0e;color:#f09595}
+body.dark .sbar.warn{background:#2e1e00;color:#EF9F27}
+
+/* PROB PANEL */
+.prob-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:1rem}
+.pm{background:var(--bg-surface);border-radius:8px;padding:10px;text-align:center}
+.pm .pl{font-size:11px;color:var(--text-muted);margin-bottom:3px}
+.pm .pv{font-size:17px;font-weight:500}
+.combos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px;margin-top:.8rem}
+.cc{border-radius:10px;padding:10px 11px;border:0.5px solid var(--border);font-size:13px}
+.cc.reach{background:#EAF3DE;border-color:#5DCAA5}
+.cc.nope{background:#FCEBEB;border-color:#F09595;opacity:.75}
+body.dark .cc.reach{background:#0e2e16;border-color:#1D9E75}
+body.dark .cc.nope{background:#2e0e0e;border-color:#E24B4A}
+.cc-t{font-weight:500;margin-bottom:3px;color:var(--text-primary);font-size:12px}
+.cc-seq{font-size:13px;margin-bottom:4px}
+.cc-pnl{font-size:15px;font-weight:500;margin-bottom:2px}
+.cc-pr{font-size:11px;color:var(--text-muted)}
+
+/* ═══════════════════════════════
+   CALENDAR — CARD STYLE
+═══════════════════════════════ */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.cal-month-title{font-size:16px;font-weight:500;color:var(--text-primary)}
+.cal-arrow{width:34px;height:34px;border-radius:8px;border:0.5px solid var(--border);background:var(--btn-bg);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--text-muted)}
+.cal-arrow:hover{background:var(--bg-hover)}
+.cal-wd-row{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px}
+.cal-wd{font-size:11px;text-align:center;color:var(--text-muted);padding:3px 0;font-weight:500}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:1.2rem}
+
+/* Day cards */
+.dc{border-radius:10px;padding:8px 7px;min-height:84px;border:0.5px solid var(--border);background:var(--bg-card);font-size:11px;transition:all .15s;position:relative}
+.dc.dc-empty{background:transparent;border-color:transparent;min-height:0}
+.dc.dc-today{border:1.5px solid var(--tab-color)}
+.dc.dc-weekend{background:var(--bg-surface)}
+
+/* Positive day — GREEN */
+.dc.dc-pos{background:#0d2b18;border-color:#1D9E75}
+body:not(.dark) .dc.dc-pos{background:#d4f0df;border-color:#1D9E75}
+
+/* Negative day — RED */
+.dc.dc-neg{background:#2b0d0d;border-color:#E24B4A}
+body:not(.dark) .dc.dc-neg{background:#f5d4d4;border-color:#E24B4A}
+
+/* Break even day — AMBER */
+.dc.dc-be{background:#2b1e00;border-color:#BA7517}
+body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
+
+.dc-num{font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:4px}
+.dc.dc-today .dc-num{color:var(--tab-color)}
+.dc.dc-pos .dc-num{color:#1D9E75}
+.dc.dc-neg .dc-num{color:#E24B4A}
+.dc.dc-be .dc-num{color:#BA7517}
+
+.dc-pnl{font-size:13px;font-weight:500;margin-bottom:2px}
+.dc-ops{font-size:10px;margin-bottom:2px}
+.dc-wr{font-size:10px;font-weight:500}
+
+/* Month summary cards */
+.mo-sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:1.2rem}
+
+/* Monthly projection table */
+.mt{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:1rem}
+.mt th{text-align:left;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);padding:6px 8px;border-bottom:0.5px solid var(--border)}
+.mt td{padding:7px 8px;border-bottom:0.5px solid var(--border-light);color:var(--text-primary)}
+.mt tr:last-child td{border-bottom:none}
+.pos{color:#1D9E75;font-weight:500}.neg{color:#E24B4A;font-weight:500}
+
+/* Rules */
+.rules-list .rule{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:0.5px solid var(--border-light);font-size:13px;line-height:1.5}
+.rules-list .rule:last-child{border-bottom:none}
+.dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.dg{background:#1D9E75}.dr{background:#E24B4A}.da{background:#BA7517}.db{background:#378ADD}
+
+@media(max-width:640px){
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(2,1fr)}
+  .g2{grid-template-columns:1fr}
+  .dc{min-height:64px;padding:5px 4px}
+  .dc-pnl{font-size:11px}
+  .mo-sum{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+ 
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <div class="htitle">Risk Manager — Charles Schwab Day Trading</div>
+    <div class="hsub">$27,500 · Margen 4x · $25,000/lote · Secuencial · 4-5 ops/día</div>
+  </div>
+  <div class="sw" onclick="toggleTheme()">
+    <span id="theme-lbl">Claro</span>
+    <div class="sw-track"><div class="sw-thumb"></div><span class="sw-ico sw-sun">☀</span><span class="sw-ico sw-moon">☾</span></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('resumen',this)">Resumen</div>
+  <div class="tab" onclick="showTab('sesion',this)">Sesión</div>
+  <div class="tab" onclick="showTab('prob',this)">Probabilístico</div>
+  <div class="tab" onclick="showTab('historial',this)">Historial</div>
+  <div class="tab" onclick="showTab('proyeccion',this)">Proyección</div>
+  <div class="tab" onclick="showTab('reglas',this)">Reglas</div>
+</div>
+
+<!-- ════════════════════════════════════
+     RESUMEN
+════════════════════════════════════ -->
+<div class="panel active" id="tab-resumen">
+  <div class="g4">
+    <div class="met"><div class="ml">Capital real</div><div class="mv">$27,500</div></div>
+    <div class="met"><div class="ml">Poder de compra 4x</div><div class="mv">$110,000</div></div>
+    <div class="met"><div class="ml">Lote por operación</div><div class="mv">$25,000</div></div>
+    <div class="met"><div class="ml">Exposición activa</div><div class="mv" style="color:#1D9E75">$25,000</div></div>
+  </div>
+  <div class="g4">
+    <div class="met"><div class="ml">Stop mín. 0.50%</div><div class="mv" style="color:#E24B4A">-$125</div></div>
+    <div class="met"><div class="ml">Stop máx. 2.50%</div><div class="mv" style="color:#E24B4A">-$625</div></div>
+    <div class="met"><div class="ml">Target mín. 1:2</div><div class="mv" style="color:#1D9E75">+$250</div></div>
+    <div class="met"><div class="ml">Target máx. 1:2</div><div class="mv" style="color:#1D9E75">+$1,250</div></div>
+  </div>
+  <div class="sec">
+    <div class="stitle">Calculadora rápida</div>
+    <div class="sr"><label>Stop loss (%)</label><input type="range" min="0.5" max="2.5" step="0.1" value="1.0" id="o-sl" oninput="calcOv()"><span class="sv" id="o-sl-o">1.0%</span></div>
+    <div class="sr"><label>Ratio R/R</label><input type="range" min="1" max="4" step="0.5" value="2" id="o-rr" oninput="calcOv()"><span class="sv" id="o-rr-o">1:2.0</span></div>
+    <div class="sr"><label>Win rate (%)</label><input type="range" min="20" max="80" step="1" value="45" id="o-wr" oninput="calcOv()"><span class="sv" id="o-wr-o">45%</span></div>
+    <div class="sr"><label>Ops/día</label><input type="range" min="1" max="5" step="1" value="4" id="o-n" oninput="calcOv()"><span class="sv" id="o-n-o">4</span></div>
+    <div class="card">
+      <div class="rl"><span class="k">Riesgo por op</span><span id="ov-r" style="color:#E24B4A;font-weight:500">-$250</span></div>
+      <div class="rl"><span class="k">Target por op</span><span id="ov-g" style="color:#1D9E75;font-weight:500">+$500</span></div>
+      <div class="rl"><span class="k">EV por operación</span><span id="ov-ev" style="font-weight:500">+$87</span></div>
+      <div class="rl"><span class="k">EV diario</span><span id="ov-evd" style="font-weight:500">+$350</span></div>
+      <div class="rl"><span class="k">Peor día / Mejor día</span><span id="ov-wb" style="font-weight:500">-$1,000 / +$2,000</span></div>
+      <div class="rl"><span class="k">Breakeven win rate</span><span id="ov-be" style="font-weight:500">34%</span></div>
+    </div>
+    <div class="bar-bg"><div class="bar-fill" id="ov-bar" style="width:55%;background:#1D9E75"></div></div>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Prob. estimada de día positivo: <span id="ov-ppos" style="font-weight:500">~55%</span></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SESIÓN
+════════════════════════════════════ -->
+<div class="panel" id="tab-sesion">
+
+  <!-- PARÁMETROS COMPARTIDOS -->
+  <div class="params-box">
+    <div class="params-header">Parámetros del día · compartidos con el panel Probabilístico</div>
+    <div class="g2" style="margin-bottom:0">
+      <div>
+        <div class="sr"><label>Stop loss (%)</label><input type="range" min="0.5" max="2.5" step="0.1" value="1.0" id="g-sl" oninput="syncParams()"><span class="sv" id="g-sl-o">1.0%</span></div>
+        <div class="sr"><label>Target (%)</label><input type="range" min="1.0" max="5.0" step="0.1" value="2.0" id="g-tp" oninput="syncParams()"><span class="sv" id="g-tp-o">2.0%</span></div>
+      </div>
+      <div>
+        <div class="sr"><label>Win rate estimado (%)</label><input type="range" min="20" max="80" step="1" value="45" id="g-wr" oninput="syncParams()"><span class="sv" id="g-wr-o">45%</span></div>
+        <div class="sr"><label>Objetivo diario ($)</label><input type="range" min="100" max="1500" step="50" value="500" id="g-obj" oninput="syncParams()"><span class="sv" id="g-obj-o">$500</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPS DEL DÍA -->
+  <div class="sec">
+    <div class="stitle">Operaciones del día — cargá cada una al cerrarla</div>
+    <div class="ops-row" id="ops-display"></div>
+    <div class="ctrl-row">
+      <div class="cbtn sel" id="btn-win" onclick="setNext('win',this)">✓ Win</div>
+      <div class="cbtn" id="btn-loss" onclick="setNext('loss',this)">✗ Loss</div>
+      <div class="cbtn" id="btn-be" onclick="setNext('be',this)">~ BE</div>
+      <div class="cbtn" onclick="undoOp()">↩ Deshacer</div>
+      <div class="cbtn" onclick="resetDay()">↺ Resetear día</div>
+      <div class="cbtn close-btn" onclick="closeDay()">✔ Cerrar sesión del día</div>
+    </div>
+  </div>
+
+  <!-- RESUMEN DE SESIÓN -->
+  <div class="stitle">Estado de la sesión</div>
+  <div class="ibox">
+    <div class="ir"><span class="k">P&L acumulado</span><span id="ss-pnl" style="font-weight:500">$0</span></div>
+    <div class="ir"><span class="k">Operaciones cargadas</span><span id="ss-ops">0 / 5</span></div>
+    <div class="ir"><span class="k">Wins / Losses / BE</span><span id="ss-wlb">0 / 0 / 0</span></div>
+    <div class="ir"><span class="k">Win rate del día</span><span id="ss-wr">—</span></div>
+    <div class="ir"><span class="k">Capital actual</span><span id="ss-cap">$27,500</span></div>
+    <div class="ir"><span class="k">Stop / Target por lote</span><span id="ss-rt">$250 / $500</span></div>
+  </div>
+  <div class="sbar neutral" id="ss-status">Sin operaciones. Configurá los parámetros y empezá a cargar.</div>
+</div>
+
+<!-- ════════════════════════════════════
+     PROBABILÍSTICO
+════════════════════════════════════ -->
+<div class="panel" id="tab-prob">
+
+  <div class="params-box">
+    <div class="params-header">Parámetros compartidos — los mismos de Sesión</div>
+    <div class="g4">
+      <div class="met"><div class="ml">Stop loss</div><div class="mv" id="p-sl-disp">1.0%</div></div>
+      <div class="met"><div class="ml">Target</div><div class="mv" id="p-tp-disp">2.0%</div></div>
+      <div class="met"><div class="ml">Win rate</div><div class="mv" id="p-wr-disp">45%</div></div>
+      <div class="met"><div class="ml">Objetivo</div><div class="mv" id="p-obj-disp">$500</div></div>
+    </div>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Modificá estos valores desde el panel <strong>Sesión</strong>. Las operaciones cargadas allí se reflejan acá automáticamente.</div>
+  </div>
+
+  <!-- OPS display (read-only mirror) -->
+  <div class="sec">
+    <div class="stitle">Operaciones cargadas hoy</div>
+    <div class="ops-row" id="ops-display-prob"></div>
+  </div>
+
+  <div class="prob-sum">
+    <div class="pm"><div class="pl">P&L actual</div><div class="pv" id="p-cur">$0</div></div>
+    <div class="pm"><div class="pl">Faltan para objetivo</div><div class="pv" id="p-need">$500</div></div>
+    <div class="pm"><div class="pl">Ops restantes</div><div class="pv" id="p-rem">5</div></div>
+  </div>
+
+  <div id="prob-msg" style="font-size:14px;font-weight:500;margin-bottom:10px;color:var(--text-primary)"></div>
+  <div class="stitle" id="prob-combos-title">Combinaciones posibles con las ops restantes</div>
+  <div id="prob-grid" class="combos-grid"></div>
+  <div id="prob-ft" style="font-size:12px;color:var(--text-muted);margin-top:10px"></div>
+</div>
+
+<!-- ════════════════════════════════════
+     HISTORIAL / CALENDARIO
+════════════════════════════════════ -->
+<div class="panel" id="tab-historial">
+  <div id="historyContainer"></div>
+
+  <!-- NAV DE MES -->
+  <div class="cal-nav">
+    <div class="cal-arrow" onclick="calPrev()">‹</div>
+    <div class="cal-month-title" id="cal-title">Marzo 2026</div>
+    <div class="cal-arrow" onclick="calNext()">›</div>
+  </div>
+
+  <!-- DÍAS DE LA SEMANA -->
+  <div class="cal-wd-row">
+    <div class="cal-wd">Dom</div><div class="cal-wd">Lun</div><div class="cal-wd">Mar</div>
+    <div class="cal-wd">Mié</div><div class="cal-wd">Jue</div><div class="cal-wd">Vie</div><div class="cal-wd">Sáb</div>
+  </div>
+
+  <!-- GRILLA DE DÍAS -->
+  <div class="cal-grid" id="cal-grid"></div>
+
+  <!-- RESUMEN DEL MES -->
+  <div class="stitle">Resumen del mes</div>
+  <div class="mo-sum">
+    <div class="met"><div class="ml">Días operados</div><div class="mv" id="mo-days">0</div></div>
+    <div class="met"><div class="ml">P&L del mes</div><div class="mv" id="mo-pnl">$0</div></div>
+    <div class="met"><div class="ml">Win rate mensual</div><div class="mv" id="mo-wr">—</div></div>
+    <div class="met"><div class="ml">Mejor día</div><div class="mv pos" id="mo-best">—</div></div>
+  </div>
+
+  <!-- BOTÓN BORRAR SESION (para testing) -->
+  <div style="margin-top:.5rem">
+    <div class="cbtn" style="font-size:12px;color:var(--text-hint);border-color:var(--border-light)" onclick="clearHistory()">Borrar historial completo</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     PROYECCIÓN
+════════════════════════════════════ -->
+<div class="panel" id="tab-proyeccion">
+  <div class="sec">
+    <div class="stitle">Parámetros de proyección</div>
+    <div class="sr"><label>EV diario estimado ($)</label><input type="range" min="50" max="1500" step="25" value="350" id="m-ev" oninput="calcMo()"><span class="sv" id="m-ev-o">$350</span></div>
+    <div class="sr"><label>Días operados por mes</label><input type="range" min="10" max="22" step="1" value="18" id="m-days" oninput="calcMo()"><span class="sv" id="m-days-o">18</span></div>
+    <div class="sr"><label>Varianza diaria ($)</label><input type="range" min="100" max="800" step="50" value="400" id="m-var" oninput="calcMo()"><span class="sv" id="m-var-o">$400</span></div>
+    <div class="sr"><label>Meses a proyectar</label><input type="range" min="1" max="12" step="1" value="6" id="m-mo" oninput="calcMo()"><span class="sv" id="m-mo-o">6</span></div>
+  </div>
+  <div class="g3">
+    <div class="met"><div class="ml">Ganancia mensual EV</div><div class="mv pos" id="m-mev">$6,300</div></div>
+    <div class="met"><div class="ml">% mensual s/capital</div><div class="mv pos" id="m-mpct">22.9%</div></div>
+    <div class="met"><div class="ml">Capital al final</div><div class="mv" id="m-final">$65,300</div></div>
+  </div>
+  <table class="mt">
+    <thead><tr><th>Mes</th><th>Capital inicio</th><th>EV del mes</th><th>Capital final</th><th>Escenario malo</th><th>Progreso</th></tr></thead>
+    <tbody id="mo-tbody"></tbody>
+  </table>
+  <div style="font-size:12px;color:var(--text-muted)">* Escenario malo = −50% de varianza acumulada. Proyección lineal, sin interés compuesto.</div>
+</div>
+
+<!-- ════════════════════════════════════
+     REGLAS
+════════════════════════════════════ -->
+<div class="panel" id="tab-reglas">
+  <div class="stitle">Reglas de gestión de riesgo</div>
+  <div class="card rules-list">
+    <div class="rule"><div class="dot dr"></div><div><strong>Hard stop diario −3% ($825):</strong> Si el P&L llega a −$825, cerrá todo y no operás más hoy. Sin excepciones.</div></div>
+    <div class="rule"><div class="dot dr"></div><div><strong>Stop por operación 0.50%–2.50%:</strong> Mínimo $125, máximo $625. El stop va en la plataforma antes de ejecutar la orden.</div></div>
+    <div class="rule"><div class="dot da"></div><div><strong>3 losses consecutivos = pausa 30 min:</strong> Revisá el contexto de mercado antes de re-entrar.</div></div>
+    <div class="rule"><div class="dot da"></div><div><strong>Sin revenge trading:</strong> Siempre $25,000 fijos. Nunca aumentar el tamaño para recuperar pérdidas.</div></div>
+    <div class="rule"><div class="dot dg"></div><div><strong>Break-even al llegar a 1:1:</strong> Cuando la ganancia iguala el riesgo inicial, mover el stop a precio de entrada.</div></div>
+    <div class="rule"><div class="dot dg"></div><div><strong>Take profit parcial:</strong> Al primer target, cerrar 50% del lote y dejar el resto con stop en BE.</div></div>
+    <div class="rule"><div class="dot db"></div><div><strong>Máximo 5 operaciones por día:</strong> Calidad sobre cantidad. Sin setup claro, no operés.</div></div>
+    <div class="rule"><div class="dot db"></div><div><strong>Registro obligatorio:</strong> Cada operación cargada en el panel antes de la siguiente.</div></div>
+    <div class="rule"><div class="dot da"></div><div><strong>Drawdown semanal &gt;8%:</strong> Si el capital cae debajo de $25,300 en la semana, reducir lote a $15,000 hasta recuperar.</div></div>
+    <div class="rule"><div class="dot db"></div><div><strong>Objetivo diario alcanzado = podés parar:</strong> Llegar a +$500 antes de las 5 ops es válido. Consistencia ante todo.</div></div>
+  </div>
+</div>
+
+</div><!-- .wrap -->
+
+<!-- ════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════ -->
+<script>
+// ─── STATE ───────────────────────────────────────
+var ops = [];
+var nextType = 'win';
+var calYear, calMonth;
+var tradeHistory = {};
+var CAPITAL = 27500;
+var HARD_STOP = -825;
+var MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+// ─── INIT ────────────────────────────────────────
+(function(){
+  var now = new Date();
+  calYear  = now.getFullYear();   // correcto: 2026
+  calMonth = now.getMonth();      // correcto: 2 = Marzo
+  try{ tradeHistory = JSON.parse(localStorage.getItem('rm-tradeHistory') || '{}'); }catch(e){ tradeHistory={}; }
+  try{
+    if(localStorage.getItem('rm-theme')==='dark'){
+      document.body.classList.add('dark');
+      document.getElementById('theme-lbl').textContent='Oscuro';
+    }
+  }catch(e){}
+  calcOv();
+  syncParams();
+  renderCalendar();
+  calcMo();
+})();
+
+// ─── THEME ───────────────────────────────────────
+function toggleTheme(){
+  var d = document.body.classList.toggle('dark');
+  document.getElementById('theme-lbl').textContent = d ? 'Oscuro' : 'Claro';
+  try{ localStorage.setItem('rm-theme', d?'dark':'light'); }catch(e){}
+}
+
+// ─── TABS ────────────────────────────────────────
+function showTab(id, el){
+  document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(x){ x.classList.remove('active'); });
+  document.getElementById('tab-'+id).classList.add('active');
+  el.classList.add('active');
+  // refresh prob display when switching to that tab
+  if(id==='prob') renderProb();
+  if(id==='historial') renderCalendar();
+}
+
+// ─── SHARED PARAMS ───────────────────────────────
+function getSL(){ return parseFloat(document.getElementById('g-sl').value); }
+function getTP(){ return parseFloat(document.getElementById('g-tp').value); }
+function getWR(){ return parseFloat(document.getElementById('g-wr').value)/100; }
+function getObj(){ return parseFloat(document.getElementById('g-obj').value); }
+
+function syncParams(){
+  var sl=getSL(), tp=getTP(), wr=getWR(), obj=getObj();
+  document.getElementById('g-sl-o').textContent  = sl.toFixed(1)+'%';
+  document.getElementById('g-tp-o').textContent  = tp.toFixed(1)+'%';
+  document.getElementById('g-wr-o').textContent  = Math.round(wr*100)+'%';
+  document.getElementById('g-obj-o').textContent = '$'+obj.toFixed(0);
+  // mirror to prob display
+  document.getElementById('p-sl-disp').textContent  = sl.toFixed(1)+'%';
+  document.getElementById('p-tp-disp').textContent  = tp.toFixed(1)+'%';
+  document.getElementById('p-wr-disp').textContent  = Math.round(wr*100)+'%';
+  document.getElementById('p-obj-disp').textContent = '$'+obj.toFixed(0);
+  renderSession();
+  renderProb();
+}
+
+// ─── OPS MANAGEMENT ──────────────────────────────
+function setNext(t, el){
+  nextType = t;
+  document.querySelectorAll('.cbtn').forEach(function(x){ x.classList.remove('sel'); });
+  el.classList.add('sel');
+}
+
+function undoOp(){
+  if(ops.length>0){ ops.pop(); renderAll(); }
+}
+
+function resetDay(){
+  if(ops.length>0 && !confirm('¿Resetear las operaciones del día? No se guardará nada.')) return;
+  ops=[];
+  renderAll();
+}
+
+function closeDay(){
+  if(ops.length===0){ alert('No hay operaciones cargadas para cerrar.'); return; }
+  var sl=getSL(), tp=getTP();
+  var rA=25000*sl/100, gA=25000*tp/100;
+  var pnl=0, wins=0, losses=0, bes=0;
+  ops.forEach(function(t){
+    if(t==='win'){ pnl+=gA; wins++; }
+    else if(t==='loss'){ pnl-=rA; losses++; }
+    else{ bes++; }
+  });
+  var now=new Date();
+  var key=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+  tradeHistory[key]={ ops:ops.slice(), pnl:pnl, wins:wins, losses:losses, bes:bes, sl:sl, tp:tp, total:ops.length };
+  try{ localStorage.setItem('rm-tradeHistory', JSON.stringify(tradeHistory)); }catch(e){}
+  var sign = pnl>=0?'+':'';
+  alert('Sesión del '+key+' guardada.\nP&L: '+sign+'$'+pnl.toFixed(0)+'\n'+wins+'W · '+losses+'L · '+bes+'BE\nWin rate: '+Math.round(wins/ops.length*100)+'%');
+  ops=[];
+  renderAll();
+  // switch to historial
+  var tabEls=document.querySelectorAll('.tab');
+  tabEls.forEach(function(x){ x.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(x){ x.classList.remove('active'); });
+  tabEls[3].classList.add('active'); // historial is 4th tab (index 3)
+  document.getElementById('tab-historial').classList.add('active');
+  renderCalendar();
+}
+
+function clearHistory(){
+  if(!confirm('¿Borrar todo el historial? Esta acción no se puede deshacer.')) return;
+  tradeHistory={};
+  try{ localStorage.removeItem('rm-tradeHistory'); }catch(e){}
+  renderCalendar();
+}
+
+function pad(n){ return n<10?'0'+n:''+n; }
+
+// ─── RENDER ALL ──────────────────────────────────
+function renderAll(){
+  renderOpsDisplay();
+  renderSession();
+  renderProb();
+}
+
+// ─── OPS DISPLAY ─────────────────────────────────
+function renderOpsDisplay(){
+  renderOpsIn('ops-display', true);
+  renderOpsIn('ops-display-prob', false);
+}
+
+function renderOpsIn(containerId, clickable){
+  var d=document.getElementById(containerId);
+  if(!d) return;
+  d.innerHTML='';
+  for(var i=0;i<5;i++){
+    var slot=document.createElement('div');
+    var t=ops[i]||null;
+    var cls='op-slot ';
+    var ico='○', lbl='Op '+(i+1);
+    if(t==='win'){  cls+='win';  ico='✓'; }
+    else if(t==='loss'){ cls+='loss'; ico='✗'; }
+    else if(t==='be'){  cls+='be';  ico='~'; }
+    else{ cls+='pending'; }
+    slot.className=cls;
+    slot.innerHTML='<span style="font-size:20px">'+ico+'</span><span class="op-label">'+lbl+'</span>';
+    if(clickable && !t && i===ops.length){
+      slot.style.opacity='1'; slot.style.cursor='pointer';
+      slot.onclick=(function(idx){ return function(){
+        if(ops.length===idx){ ops.push(nextType); renderAll(); }
+      };})(i);
+    }
+    d.appendChild(slot);
+  }
+}
+
+// ─── SESSION ─────────────────────────────────────
+function renderSession(){
+  var sl=getSL(), tp=getTP();
+  var rA=25000*sl/100, gA=25000*tp/100;
+  var pnl=0, wins=0, losses=0, bes=0;
+  ops.forEach(function(t){
+    if(t==='win'){pnl+=gA;wins++;}
+    else if(t==='loss'){pnl-=rA;losses++;}
+    else{bes++;}
+  });
+  var total=wins+losses+bes;
+  var wr=total>0?Math.round(wins/total*100):null;
+
+  var pe=document.getElementById('ss-pnl');
+  pe.textContent=(pnl>=0?'+':'')+' $'+pnl.toFixed(0);
+  pe.style.color=pnl>0?'#1D9E75':pnl<0?'#E24B4A':'var(--text-muted)';
+
+  document.getElementById('ss-ops').textContent=total+' / 5';
+  document.getElementById('ss-wlb').textContent=wins+' / '+losses+' / '+bes;
+  document.getElementById('ss-wr').textContent=wr!==null?wr+'% ('+wins+'W de '+total+'ops)':'—';
+  document.getElementById('ss-cap').textContent='$'+(CAPITAL+pnl).toFixed(0);
+  document.getElementById('ss-rt').textContent='$'+rA.toFixed(0)+' / $'+gA.toFixed(0);
+
+  var sb=document.getElementById('ss-status');
+  if(total===0){ sb.textContent='Sin operaciones. Seleccioná Win/Loss/BE y clickeá el próximo slot.'; sb.className='sbar neutral'; }
+  else if(pnl<=HARD_STOP){ sb.textContent='HARD STOP ALCANZADO (−$825) — Cerrá todo, no más operaciones hoy.'; sb.className='sbar bad'; }
+  else if(pnl>=getObj()){ sb.textContent='Objetivo $'+getObj().toFixed(0)+' alcanzado con +$'+pnl.toFixed(0)+'. Podés cerrar la sesión.'; sb.className='sbar ok'; }
+  else if(total>=5){ sb.textContent='5 operaciones completadas. P&L: '+(pnl>=0?'+':'')+' $'+pnl.toFixed(0)+'. Cerrá la sesión.'; sb.className=pnl>=0?'sbar ok':'sbar bad'; }
+  else if(pnl>0){ sb.textContent='Día positivo +$'+pnl.toFixed(0)+'. Seguí con disciplina.'; sb.className='sbar ok'; }
+  else{ sb.textContent='En negativo −$'+Math.abs(pnl).toFixed(0)+'. Evaluá el próximo setup con calma.'; sb.className='sbar warn'; }
+}
+
+// ─── PROBABILÍSTICO ──────────────────────────────
+function renderProb(){
+  var sl=getSL(), tp=getTP(), wr=getWR(), obj=getObj();
+  var rA=25000*sl/100, gA=25000*tp/100;
+  var curPnl=0;
+  ops.forEach(function(t){ if(t==='win') curPnl+=gA; else if(t==='loss') curPnl-=rA; });
+  var rem=5-ops.length, need=obj-curPnl;
+
+  var cpEl=document.getElementById('p-cur');
+  cpEl.textContent=(curPnl>=0?'+':'')+' $'+curPnl.toFixed(0);
+  cpEl.style.color=curPnl>=0?'#1D9E75':'#E24B4A';
+
+  var nEl=document.getElementById('p-need');
+  nEl.textContent=need<=0?'¡Logrado!':'$'+need.toFixed(0);
+  nEl.style.color=need<=0?'#1D9E75':'var(--text-primary)';
+
+  document.getElementById('p-rem').textContent=rem;
+
+  // mirror ops
+  renderOpsIn('ops-display-prob', false);
+
+  var grid=document.getElementById('prob-grid');
+  var ft=document.getElementById('prob-ft');
+  var msg=document.getElementById('prob-msg');
+  grid.innerHTML=''; ft.textContent='';
+
+  if(ops.length>=5){
+    msg.textContent=curPnl>=obj?'Objetivo alcanzado. P&L final: +$'+curPnl.toFixed(0)+'.':'Día completo. P&L final: '+(curPnl>=0?'+':'')+' $'+curPnl.toFixed(0)+'.';
+    msg.style.color=curPnl>=obj?'#1D9E75':'#E24B4A';
+    document.getElementById('prob-combos-title').style.display='none';
+    return;
+  }
+  document.getElementById('prob-combos-title').style.display='';
+
+  if(need<=0){
+    msg.textContent='Objetivo $'+obj.toFixed(0)+' alcanzado con +$'+curPnl.toFixed(0)+'. Podés parar o seguir.';
+    msg.style.color='#1D9E75'; return;
+  }
+
+  // build combos
+  var types=['win','loss','be'], combos=[];
+  function bc(cur){ if(cur.length===rem){combos.push(cur.slice());return;} types.forEach(function(t){cur.push(t);bc(cur);cur.pop();}); }
+  bc([]);
+
+  var seen={}, uniq=[];
+  combos.forEach(function(c){
+    var w=c.filter(function(x){return x==='win';}).length;
+    var l=c.filter(function(x){return x==='loss';}).length;
+    var be=c.filter(function(x){return x==='be';}).length;
+    var key=w+'-'+l+'-'+be;
+    if(!seen[key]){
+      seen[key]=true;
+      var pnl=w*gA-l*rA;
+      uniq.push({w:w,l:l,be:be,pnl:curPnl+pnl,prob:Math.pow(wr,w)*Math.pow(1-wr,l)*Math.pow(0.05,be)});
+    }
+  });
+  var tp=0; uniq.forEach(function(c){tp+=c.prob;});
+  var rt=0; uniq.forEach(function(c){c.prob=c.prob/tp; if(c.pnl>=obj) rt+=c.prob;});
+  uniq.sort(function(a,b){return b.pnl-a.pnl;});
+
+  msg.textContent='Con '+rem+' op'+(rem>1?'s':'')+' restante'+(rem>1?'s':'')+', la probabilidad de alcanzar $'+obj.toFixed(0)+' hoy es del '+Math.round(rt*100)+'%.';
+  msg.style.color=rt>=0.4?'#1D9E75':rt>=0.2?'#BA7517':'#E24B4A';
+
+  uniq.forEach(function(c){
+    var reaches=c.pnl>=obj, div=document.createElement('div');
+    div.className='cc '+(reaches?'reach':'nope');
+    var seq='';
+    for(var i=0;i<c.w;i++) seq+='<span style="color:#1D9E75">✓</span> ';
+    for(var i=0;i<c.l;i++) seq+='<span style="color:#E24B4A">✗</span> ';
+    for(var i=0;i<c.be;i++) seq+='<span style="color:#BA7517">~</span> ';
+    div.innerHTML='<div class="cc-t">'+c.w+'W · '+c.l+'L · '+c.be+'BE</div>'
+      +'<div class="cc-seq">'+seq+'</div>'
+      +'<div class="cc-pnl" style="color:'+(reaches?'#1D9E75':'#E24B4A')+'">'+(c.pnl>=0?'+':'')+' $'+c.pnl.toFixed(0)+'</div>'
+      +'<div class="cc-pr">Prob: '+Math.round(c.prob*100)+'%</div>';
+    grid.appendChild(div);
+  });
+  ft.textContent='Verde = alcanza $'+obj.toFixed(0)+'. Rojo = no alcanza. Win rate usado: '+Math.round(wr*100)+'%.';
+}
+
+// ─── CALENDAR ────────────────────────────────────
+function calPrev(){ calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+function calNext(){ calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
+
+function renderCalendar(){
+  document.getElementById('cal-title').textContent = MONTHS_ES[calMonth]+' '+calYear;
+
+  var grid=document.getElementById('cal-grid');
+  grid.innerHTML='';
+
+  var firstDay=new Date(calYear, calMonth, 1).getDay();
+  var daysInMonth=new Date(calYear, calMonth+1, 0).getDate();
+
+  var today=new Date();
+  var todayKey=today.getFullYear()+'-'+pad(today.getMonth()+1)+'-'+pad(today.getDate());
+
+  // empty leading cells
+  for(var e=0;e<firstDay;e++){
+    var emp=document.createElement('div'); emp.className='dc dc-empty'; grid.appendChild(emp);
+  }
+
+  var moPnl=0, moDays=0, moWins=0, moTotal=0, moBest=-Infinity;
+
+  for(var d=1;d<=daysInMonth;d++){
+    var key=calYear+'-'+pad(calMonth+1)+'-'+pad(d);
+    var rec=tradeHistory[key]||null;
+    var isToday=(key===todayKey);
+    var dow=new Date(calYear,calMonth,d).getDay();
+    var isWeekend=(dow===0||dow===6);
+
+    var cell=document.createElement('div');
+    var cls='dc';
+    if(isToday) cls+=' dc-today';
+    else if(isWeekend && !rec) cls+=' dc-weekend';
+
+    if(rec){
+      moDays++;
+      moPnl+=rec.pnl;
+      moWins+=rec.wins;
+      moTotal+=rec.total;
+      if(rec.pnl>moBest) moBest=rec.pnl;
+      if(rec.pnl>0)      cls+=' dc-pos';
+      else if(rec.pnl<0) cls+=' dc-neg';
+      else               cls+=' dc-be';
+    }
+    cell.className=cls;
+
+    // number
+    var inner='<div class="dc-num">'+d+'</div>';
+
+    if(rec){
+      var sign=rec.pnl>=0?'+':'';
+      var pnlColor=rec.pnl>0?'#1D9E75':rec.pnl<0?'#E24B4A':'#BA7517';
+      var tot=rec.total;
+      var wrPct=tot>0?Math.round(rec.wins/tot*100):0;
+      var wrCls=wrPct>=60?'#1D9E75':wrPct>=40?'#BA7517':'#E24B4A';
+      var opsStr=rec.wins+'W·'+rec.losses+'L·'+rec.bes+'BE';
+      inner+='<div class="dc-pnl" style="color:'+pnlColor+'">'+sign+'$'+Math.round(rec.pnl)+'</div>';
+      inner+='<div class="dc-ops" style="color:'+pnlColor+'">'+opsStr+'</div>';
+      inner+='<div class="dc-wr" style="color:'+wrCls+'">WR '+wrPct+'% ('+rec.wins+'/'+tot+')</div>';
+    } else if(isToday){
+      inner+='<div style="font-size:10px;color:var(--tab-color);margin-top:6px;font-weight:500">Hoy</div>';
+    }
+
+    cell.innerHTML=inner;
+    grid.appendChild(cell);
+  }
+
+  // month summary
+  document.getElementById('mo-days').textContent=moDays;
+  var mpEl=document.getElementById('mo-pnl');
+  mpEl.textContent=(moPnl>=0?'+':'')+' $'+Math.round(moPnl);
+  mpEl.className='mv '+(moPnl>0?'pos':moPnl<0?'neg':'');
+  document.getElementById('mo-wr').textContent=moTotal>0?Math.round(moWins/moTotal*100)+'%':'—';
+  document.getElementById('mo-best').textContent=moBest>-Infinity?'+$'+Math.round(moBest):'—';
+}
+
+// ─── OVERVIEW CALC ───────────────────────────────
+function calcOv(){
+  var sl=parseFloat(document.getElementById('o-sl').value);
+  var rr=parseFloat(document.getElementById('o-rr').value);
+  var wr=parseFloat(document.getElementById('o-wr').value)/100;
+  var n=parseInt(document.getElementById('o-n').value);
+  document.getElementById('o-sl-o').textContent=sl.toFixed(1)+'%';
+  document.getElementById('o-rr-o').textContent='1:'+rr.toFixed(1);
+  document.getElementById('o-wr-o').textContent=Math.round(wr*100)+'%';
+  document.getElementById('o-n-o').textContent=n;
+  var risk=25000*sl/100, gain=risk*rr;
+  var ev=wr*gain-(1-wr)*risk, be=1/(1+rr);
+  var pp=Math.min(96,Math.max(4,Math.round(50+ev/Math.max(gain,1)*42)));
+  document.getElementById('ov-r').textContent='-$'+risk.toFixed(0);
+  document.getElementById('ov-g').textContent='+$'+gain.toFixed(0);
+  var ee=document.getElementById('ov-ev'); ee.textContent=(ev>=0?'+':'')+' $'+ev.toFixed(0); ee.style.color=ev>=0?'#1D9E75':'#E24B4A';
+  var ed=document.getElementById('ov-evd'); ed.textContent=(ev*n>=0?'+':'')+' $'+(ev*n).toFixed(0); ed.style.color=ev*n>=0?'#1D9E75':'#E24B4A';
+  document.getElementById('ov-wb').textContent='-$'+(risk*n).toFixed(0)+' / +$'+(gain*n).toFixed(0);
+  document.getElementById('ov-be').textContent=Math.round(be*100)+'%';
+  document.getElementById('ov-bar').style.width=pp+'%';
+  document.getElementById('ov-bar').style.background=ev>=0?'#1D9E75':'#E24B4A';
+  document.getElementById('ov-ppos').textContent='~'+pp+'%';
+}
+
+// ─── MONTHLY PROJECTION ──────────────────────────
+function calcMo(){
+  var ev    = parseFloat(document.getElementById('m-ev').value);
+  var days  = parseInt(document.getElementById('m-days').value);
+  var vari  = parseFloat(document.getElementById('m-var').value);
+  var mos   = parseInt(document.getElementById('m-mo').value);
+  document.getElementById('m-ev-o').textContent    = '$'+ev.toFixed(0);
+  document.getElementById('m-days-o').textContent  = days;
+  document.getElementById('m-var-o').textContent   = '$'+vari.toFixed(0);
+  document.getElementById('m-mo-o').textContent    = mos;
+
+  var mev   = ev * days;
+  var mpct  = mev / CAPITAL * 100;
+  document.getElementById('m-mev').textContent  = '$'+Math.round(mev).toLocaleString();
+  document.getElementById('m-mpct').textContent = mpct.toFixed(1)+'%';
+
+  var tbody = document.getElementById('mo-tbody');
+  tbody.innerHTML = '';
+  var cap = CAPITAL;
+  var now = new Date();
+  var y = now.getFullYear(), m = now.getMonth();
+  var MONTHS_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+  for(var i=0;i<mos;i++){
+    var mn   = MONTHS_SHORT[(m+i)%12] + ' ' + (y + Math.floor((m+i)/12));
+    var ini  = cap;
+    var gain = mev;
+    var bad  = mev - vari * Math.sqrt(days) * 0.5;
+    var cfin = ini + gain;
+    var cbad = ini + bad;
+    var pct  = (gain/ini*100).toFixed(1);
+    var tr   = document.createElement('tr');
+    tr.innerHTML =
+      '<td>'+mn+'</td>'+
+      '<td>$'+Math.round(ini).toLocaleString()+'</td>'+
+      '<td class="'+(gain>=0?'pos':'neg')+'">'+(gain>=0?'+':'')+' $'+Math.round(gain).toLocaleString()+'</td>'+
+      '<td><strong>$'+Math.round(cfin).toLocaleString()+'</strong></td>'+
+      '<td class="'+(cbad>=0?'pos':'neg')+'">'+(cbad>=0?'+':'')+' $'+Math.round(cbad).toLocaleString()+'</td>'+
+      '<td style="font-size:11px;color:var(--text-muted)">'+pct+'%</td>';
+    tbody.appendChild(tr);
+    cap = cfin;
+  }
+  document.getElementById('m-final').textContent = '$'+Math.round(cap).toLocaleString();
+}
+
+
+</script>
+</body>
+</html>
