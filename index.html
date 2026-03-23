@@ -1,3 +1,6 @@
+
+Copiar
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -33,7 +36,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   margin: 2px 0;
   color: var(--text-primary);
 }
-
+ 
 /* HEADER */
 .hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem;gap:12px}
 .htitle{font-size:19px;font-weight:500;color:var(--text-primary);margin-bottom:3px}
@@ -46,33 +49,33 @@ body.dark .sw-track{background:#1a3a5c;border-color:#1e4a80}
 body.dark .sw-thumb{transform:translateX(20px);background:#5ba4f5}
 .sw-ico{font-size:11px;position:absolute;top:50%;transform:translateY(-50%);pointer-events:none}
 .sw-sun{left:5px}.sw-moon{right:4px}
-
+ 
 /* TABS */
 .tabs{display:flex;gap:6px;margin-bottom:1.2rem;flex-wrap:wrap}
 .tab{padding:7px 15px;border-radius:8px;border:0.5px solid var(--border);font-size:13px;cursor:pointer;background:var(--btn-bg);color:var(--text-muted);transition:background .15s}
 .tab.active{background:var(--tab-bg);color:var(--tab-color);border-color:var(--tab-border);font-weight:500}
 .panel{display:none}.panel.active{display:block}
-
+ 
 /* GRIDS */
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:1.1rem}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:1.1rem}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:1.1rem}
-
+ 
 /* METRICS */
 .met{background:var(--bg-surface);border-radius:8px;padding:11px;transition:background .2s}
 .met .ml{font-size:11px;color:var(--text-muted);margin-bottom:3px}
 .met .mv{font-size:19px;font-weight:500;color:var(--text-primary)}
-
+ 
 /* SECTION */
 .sec{margin-bottom:1.3rem}
 .stitle{font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
-
+ 
 /* CARD */
 .card{background:var(--bg-card);border:0.5px solid var(--border);border-radius:12px;padding:.9rem 1rem;margin-bottom:9px}
 .rl{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border-light);font-size:13px}
 .rl:last-child{border-bottom:none}
 .rl .k{color:var(--text-muted)}
-
+ 
 /* SLIDERS */
 .sr{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .sr label{font-size:13px;color:var(--text-muted);min-width:160px}
@@ -80,12 +83,12 @@ body.dark .sw-thumb{transform:translateX(20px);background:#5ba4f5}
 .sr .sv{font-size:13px;font-weight:500;min-width:56px;text-align:right;color:var(--text-primary)}
 .bar-bg{background:var(--bg-surface);border-radius:4px;height:7px;overflow:hidden}
 .bar-fill{height:7px;border-radius:4px;transition:width .3s}
-
+ 
 /* SHARED PARAMS */
 .params-box{background:var(--bg-surface);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.2rem;border:1.5px solid var(--tab-border)}
 .params-header{font-size:11px;font-weight:500;color:var(--tab-color);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .params-header::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--tab-color);flex-shrink:0}
-
+ 
 /* OPS BUTTONS ROW */
 .ops-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
 .op-slot{width:52px;height:52px;border-radius:10px;border:0.5px solid var(--border);background:var(--bg-card);font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-direction:column;gap:2px}
@@ -97,7 +100,7 @@ body.dark .sw-thumb{transform:translateX(20px);background:#5ba4f5}
 body:not(.dark) .op-slot.win{background:#EAF3DE;border-color:#3B6D11}
 body:not(.dark) .op-slot.loss{background:#FCEBEB;border-color:#A32D2D}
 body:not(.dark) .op-slot.be{background:#FAEEDA;border-color:#854F0B}
-
+ 
 /* CONTROL BUTTONS */
 .ctrl-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem}
 .cbtn{padding:7px 13px;border-radius:8px;border:0.5px solid var(--border);font-size:13px;cursor:pointer;background:var(--btn-bg);color:var(--btn-color);transition:background .15s;user-select:none}
@@ -105,13 +108,13 @@ body:not(.dark) .op-slot.be{background:#FAEEDA;border-color:#854F0B}
 .cbtn.sel{background:var(--tab-bg);color:var(--tab-color);border-color:var(--tab-border);font-weight:500}
 .cbtn.close-btn{background:#EAF3DE;color:#3B6D11;border-color:#5DCAA5;font-weight:500}
 body.dark .cbtn.close-btn{background:#0e2e16;color:#5DCAA5;border-color:#1D9E75}
-
+ 
 /* INFO BOX */
 .ibox{background:var(--bg-surface);border-radius:12px;padding:12px 14px}
 .ir{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:0.5px solid var(--border)}
 .ir:last-child{border-bottom:none}
 .ir .k{color:var(--text-muted)}
-
+ 
 /* STATUS BAR */
 .sbar{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;margin-top:10px;text-align:center}
 .sbar.ok{background:#EAF3DE;color:#3B6D11}
@@ -121,7 +124,7 @@ body.dark .cbtn.close-btn{background:#0e2e16;color:#5DCAA5;border-color:#1D9E75}
 body.dark .sbar.ok{background:#0e2e16;color:#5DCAA5}
 body.dark .sbar.bad{background:#2e0e0e;color:#f09595}
 body.dark .sbar.warn{background:#2e1e00;color:#EF9F27}
-
+ 
 /* PROB PANEL */
 .prob-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:1rem}
 .pm{background:var(--bg-surface);border-radius:8px;padding:10px;text-align:center}
@@ -137,7 +140,7 @@ body.dark .cc.nope{background:#2e0e0e;border-color:#E24B4A}
 .cc-seq{font-size:13px;margin-bottom:4px}
 .cc-pnl{font-size:15px;font-weight:500;margin-bottom:2px}
 .cc-pr{font-size:11px;color:var(--text-muted)}
-
+ 
 /* ═══════════════════════════════
    CALENDAR — CARD STYLE
 ═══════════════════════════════ */
@@ -148,51 +151,51 @@ body.dark .cc.nope{background:#2e0e0e;border-color:#E24B4A}
 .cal-wd-row{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px}
 .cal-wd{font-size:11px;text-align:center;color:var(--text-muted);padding:3px 0;font-weight:500}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:1.2rem}
-
+ 
 /* Day cards */
 .dc{border-radius:10px;padding:8px 7px;min-height:84px;border:0.5px solid var(--border);background:var(--bg-card);font-size:11px;transition:all .15s;position:relative}
 .dc.dc-empty{background:transparent;border-color:transparent;min-height:0}
 .dc.dc-today{border:1.5px solid var(--tab-color)}
 .dc.dc-weekend{background:var(--bg-surface)}
-
+ 
 /* Positive day — GREEN */
 .dc.dc-pos{background:#0d2b18;border-color:#1D9E75}
 body:not(.dark) .dc.dc-pos{background:#d4f0df;border-color:#1D9E75}
-
+ 
 /* Negative day — RED */
 .dc.dc-neg{background:#2b0d0d;border-color:#E24B4A}
 body:not(.dark) .dc.dc-neg{background:#f5d4d4;border-color:#E24B4A}
-
+ 
 /* Break even day — AMBER */
 .dc.dc-be{background:#2b1e00;border-color:#BA7517}
 body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
-
+ 
 .dc-num{font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:4px}
 .dc.dc-today .dc-num{color:var(--tab-color)}
 .dc.dc-pos .dc-num{color:#1D9E75}
 .dc.dc-neg .dc-num{color:#E24B4A}
 .dc.dc-be .dc-num{color:#BA7517}
-
+ 
 .dc-pnl{font-size:13px;font-weight:500;margin-bottom:2px}
 .dc-ops{font-size:10px;margin-bottom:2px}
 .dc-wr{font-size:10px;font-weight:500}
-
+ 
 /* Month summary cards */
 .mo-sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:1.2rem}
-
+ 
 /* Monthly projection table */
 .mt{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:1rem}
 .mt th{text-align:left;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);padding:6px 8px;border-bottom:0.5px solid var(--border)}
 .mt td{padding:7px 8px;border-bottom:0.5px solid var(--border-light);color:var(--text-primary)}
 .mt tr:last-child td{border-bottom:none}
 .pos{color:#1D9E75;font-weight:500}.neg{color:#E24B4A;font-weight:500}
-
+ 
 /* Rules */
 .rules-list .rule{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:0.5px solid var(--border-light);font-size:13px;line-height:1.5}
 .rules-list .rule:last-child{border-bottom:none}
 .dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
 .dg{background:#1D9E75}.dr{background:#E24B4A}.da{background:#BA7517}.db{background:#378ADD}
-
+ 
 @media(max-width:640px){
   .g4{grid-template-columns:repeat(2,1fr)}
   .g3{grid-template-columns:repeat(2,1fr)}
@@ -217,7 +220,7 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
     <div class="sw-track"><div class="sw-thumb"></div><span class="sw-ico sw-sun">☀</span><span class="sw-ico sw-moon">☾</span></div>
   </div>
 </div>
-
+ 
 <!-- TABS -->
 <div class="tabs">
   <div class="tab active" onclick="showTab('resumen',this)">Resumen</div>
@@ -227,7 +230,7 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
   <div class="tab" onclick="showTab('proyeccion',this)">Proyección</div>
   <div class="tab" onclick="showTab('reglas',this)">Reglas</div>
 </div>
-
+ 
 <!-- ════════════════════════════════════
      RESUMEN
 ════════════════════════════════════ -->
@@ -262,19 +265,19 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
     <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Prob. estimada de día positivo: <span id="ov-ppos" style="font-weight:500">~55%</span></div>
   </div>
 </div>
-
+ 
 <!-- ════════════════════════════════════
      SESIÓN
 ════════════════════════════════════ -->
 <div class="panel" id="tab-sesion">
-
+ 
   <!-- PARÁMETROS COMPARTIDOS -->
   <div class="params-box">
     <div class="params-header">Parámetros del día · compartidos con el panel Probabilístico</div>
     <div class="g2" style="margin-bottom:0">
       <div>
         <div class="sr"><label>Stop loss (%)</label><input type="range" min="0.5" max="2.5" step="0.1" value="1.0" id="g-sl" oninput="syncParams()"><span class="sv" id="g-sl-o">1.0%</span></div>
-        <div class="sr"><label>Target (%)</label><input type="range" min="1.0" max="5.0" step="0.1" value="2.0" id="g-tp" oninput="syncParams()"><span class="sv" id="g-tp-o">2.0%</span></div>
+        <div class="sr"><label>Target (%)</label><input type="range" min="0.5" max="5.0" step="0.1" value="2.0" id="g-tp" oninput="syncParams()"><span class="sv" id="g-tp-o">2.0%</span></div>
       </div>
       <div>
         <div class="sr"><label>Win rate estimado (%)</label><input type="range" min="20" max="80" step="1" value="45" id="g-wr" oninput="syncParams()"><span class="sv" id="g-wr-o">45%</span></div>
@@ -282,7 +285,7 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
       </div>
     </div>
   </div>
-
+ 
   <!-- OPS DEL DÍA -->
   <div class="sec">
     <div class="stitle">Operaciones del día — cargá cada una al cerrarla</div>
@@ -296,7 +299,7 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
       <div class="cbtn close-btn" onclick="closeDay()">✔ Cerrar sesión del día</div>
     </div>
   </div>
-
+ 
   <!-- RESUMEN DE SESIÓN -->
   <div class="stitle">Estado de la sesión</div>
   <div class="ibox">
@@ -309,12 +312,12 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
   </div>
   <div class="sbar neutral" id="ss-status">Sin operaciones. Configurá los parámetros y empezá a cargar.</div>
 </div>
-
+ 
 <!-- ════════════════════════════════════
      PROBABILÍSTICO
 ════════════════════════════════════ -->
 <div class="panel" id="tab-prob">
-
+ 
   <div class="params-box">
     <div class="params-header">Parámetros compartidos — los mismos de Sesión</div>
     <div class="g4">
@@ -325,47 +328,47 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
     </div>
     <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Modificá estos valores desde el panel <strong>Sesión</strong>. Las operaciones cargadas allí se reflejan acá automáticamente.</div>
   </div>
-
+ 
   <!-- OPS display (read-only mirror) -->
   <div class="sec">
     <div class="stitle">Operaciones cargadas hoy</div>
     <div class="ops-row" id="ops-display-prob"></div>
   </div>
-
+ 
   <div class="prob-sum">
     <div class="pm"><div class="pl">P&L actual</div><div class="pv" id="p-cur">$0</div></div>
     <div class="pm"><div class="pl">Faltan para objetivo</div><div class="pv" id="p-need">$500</div></div>
     <div class="pm"><div class="pl">Ops restantes</div><div class="pv" id="p-rem">5</div></div>
   </div>
-
+ 
   <div id="prob-msg" style="font-size:14px;font-weight:500;margin-bottom:10px;color:var(--text-primary)"></div>
   <div class="stitle" id="prob-combos-title">Combinaciones posibles con las ops restantes</div>
   <div id="prob-grid" class="combos-grid"></div>
   <div id="prob-ft" style="font-size:12px;color:var(--text-muted);margin-top:10px"></div>
 </div>
-
+ 
 <!-- ════════════════════════════════════
      HISTORIAL / CALENDARIO
 ════════════════════════════════════ -->
 <div class="panel" id="tab-historial">
   <div id="historyContainer"></div>
-
+ 
   <!-- NAV DE MES -->
   <div class="cal-nav">
     <div class="cal-arrow" onclick="calPrev()">‹</div>
     <div class="cal-month-title" id="cal-title">Marzo 2026</div>
     <div class="cal-arrow" onclick="calNext()">›</div>
   </div>
-
+ 
   <!-- DÍAS DE LA SEMANA -->
   <div class="cal-wd-row">
     <div class="cal-wd">Dom</div><div class="cal-wd">Lun</div><div class="cal-wd">Mar</div>
     <div class="cal-wd">Mié</div><div class="cal-wd">Jue</div><div class="cal-wd">Vie</div><div class="cal-wd">Sáb</div>
   </div>
-
+ 
   <!-- GRILLA DE DÍAS -->
   <div class="cal-grid" id="cal-grid"></div>
-
+ 
   <!-- RESUMEN DEL MES -->
   <div class="stitle">Resumen del mes</div>
   <div class="mo-sum">
@@ -374,13 +377,13 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
     <div class="met"><div class="ml">Win rate mensual</div><div class="mv" id="mo-wr">—</div></div>
     <div class="met"><div class="ml">Mejor día</div><div class="mv pos" id="mo-best">—</div></div>
   </div>
-
+ 
   <!-- BOTÓN BORRAR SESION (para testing) -->
   <div style="margin-top:.5rem">
     <div class="cbtn" style="font-size:12px;color:var(--text-hint);border-color:var(--border-light)" onclick="clearHistory()">Borrar historial completo</div>
   </div>
 </div>
-
+ 
 <!-- ════════════════════════════════════
      PROYECCIÓN
 ════════════════════════════════════ -->
@@ -403,7 +406,7 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
   </table>
   <div style="font-size:12px;color:var(--text-muted)">* Escenario malo = −50% de varianza acumulada. Proyección lineal, sin interés compuesto.</div>
 </div>
-
+ 
 <!-- ════════════════════════════════════
      REGLAS
 ════════════════════════════════════ -->
@@ -422,9 +425,9 @@ body:not(.dark) .dc.dc-be{background:#fdf0d4;border-color:#BA7517}
     <div class="rule"><div class="dot db"></div><div><strong>Objetivo diario alcanzado = podés parar:</strong> Llegar a +$500 antes de las 5 ops es válido. Consistencia ante todo.</div></div>
   </div>
 </div>
-
+ 
 </div><!-- .wrap -->
-
+ 
 <!-- ════════════════════════════════════════════════
      JAVASCRIPT
 ════════════════════════════════════════════════ -->
@@ -437,7 +440,7 @@ var tradeHistory = {};
 var CAPITAL = 27500;
 var HARD_STOP = -825;
 var MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-
+ 
 // ─── INIT ────────────────────────────────────────
 (function(){
   var now = new Date();
@@ -455,14 +458,14 @@ var MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agost
   renderCalendar();
   calcMo();
 })();
-
+ 
 // ─── THEME ───────────────────────────────────────
 function toggleTheme(){
   var d = document.body.classList.toggle('dark');
   document.getElementById('theme-lbl').textContent = d ? 'Oscuro' : 'Claro';
   try{ localStorage.setItem('rm-theme', d?'dark':'light'); }catch(e){}
 }
-
+ 
 // ─── TABS ────────────────────────────────────────
 function showTab(id, el){
   document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
@@ -473,13 +476,13 @@ function showTab(id, el){
   if(id==='prob') renderProb();
   if(id==='historial') renderCalendar();
 }
-
+ 
 // ─── SHARED PARAMS ───────────────────────────────
 function getSL(){ return parseFloat(document.getElementById('g-sl').value); }
 function getTP(){ return parseFloat(document.getElementById('g-tp').value); }
 function getWR(){ return parseFloat(document.getElementById('g-wr').value)/100; }
 function getObj(){ return parseFloat(document.getElementById('g-obj').value); }
-
+ 
 function syncParams(){
   var sl=getSL(), tp=getTP(), wr=getWR(), obj=getObj();
   document.getElementById('g-sl-o').textContent  = sl.toFixed(1)+'%';
@@ -494,24 +497,24 @@ function syncParams(){
   renderSession();
   renderProb();
 }
-
+ 
 // ─── OPS MANAGEMENT ──────────────────────────────
 function setNext(t, el){
   nextType = t;
   document.querySelectorAll('.cbtn').forEach(function(x){ x.classList.remove('sel'); });
   el.classList.add('sel');
 }
-
+ 
 function undoOp(){
   if(ops.length>0){ ops.pop(); renderAll(); }
 }
-
+ 
 function resetDay(){
   if(ops.length>0 && !confirm('¿Resetear las operaciones del día? No se guardará nada.')) return;
   ops=[];
   renderAll();
 }
-
+ 
 function closeDay(){
   if(ops.length===0){ alert('No hay operaciones cargadas para cerrar.'); return; }
   var sl=getSL(), tp=getTP();
@@ -538,29 +541,29 @@ function closeDay(){
   document.getElementById('tab-historial').classList.add('active');
   renderCalendar();
 }
-
+ 
 function clearHistory(){
   if(!confirm('¿Borrar todo el historial? Esta acción no se puede deshacer.')) return;
   tradeHistory={};
   try{ localStorage.removeItem('rm-tradeHistory'); }catch(e){}
   renderCalendar();
 }
-
+ 
 function pad(n){ return n<10?'0'+n:''+n; }
-
+ 
 // ─── RENDER ALL ──────────────────────────────────
 function renderAll(){
   renderOpsDisplay();
   renderSession();
   renderProb();
 }
-
+ 
 // ─── OPS DISPLAY ─────────────────────────────────
 function renderOpsDisplay(){
   renderOpsIn('ops-display', true);
   renderOpsIn('ops-display-prob', false);
 }
-
+ 
 function renderOpsIn(containerId, clickable){
   var d=document.getElementById(containerId);
   if(!d) return;
@@ -585,7 +588,7 @@ function renderOpsIn(containerId, clickable){
     d.appendChild(slot);
   }
 }
-
+ 
 // ─── SESSION ─────────────────────────────────────
 function renderSession(){
   var sl=getSL(), tp=getTP();
@@ -598,17 +601,17 @@ function renderSession(){
   });
   var total=wins+losses+bes;
   var wr=total>0?Math.round(wins/total*100):null;
-
+ 
   var pe=document.getElementById('ss-pnl');
   pe.textContent=(pnl>=0?'+':'')+' $'+pnl.toFixed(0);
   pe.style.color=pnl>0?'#1D9E75':pnl<0?'#E24B4A':'var(--text-muted)';
-
+ 
   document.getElementById('ss-ops').textContent=total+' / 5';
   document.getElementById('ss-wlb').textContent=wins+' / '+losses+' / '+bes;
   document.getElementById('ss-wr').textContent=wr!==null?wr+'% ('+wins+'W de '+total+'ops)':'—';
   document.getElementById('ss-cap').textContent='$'+(CAPITAL+pnl).toFixed(0);
   document.getElementById('ss-rt').textContent='$'+rA.toFixed(0)+' / $'+gA.toFixed(0);
-
+ 
   var sb=document.getElementById('ss-status');
   if(total===0){ sb.textContent='Sin operaciones. Seleccioná Win/Loss/BE y clickeá el próximo slot.'; sb.className='sbar neutral'; }
   else if(pnl<=HARD_STOP){ sb.textContent='HARD STOP ALCANZADO (−$825) — Cerrá todo, no más operaciones hoy.'; sb.className='sbar bad'; }
@@ -617,7 +620,7 @@ function renderSession(){
   else if(pnl>0){ sb.textContent='Día positivo +$'+pnl.toFixed(0)+'. Seguí con disciplina.'; sb.className='sbar ok'; }
   else{ sb.textContent='En negativo −$'+Math.abs(pnl).toFixed(0)+'. Evaluá el próximo setup con calma.'; sb.className='sbar warn'; }
 }
-
+ 
 // ─── PROBABILÍSTICO ──────────────────────────────
 function renderProb(){
   var sl=getSL(), tp=getTP(), wr=getWR(), obj=getObj();
@@ -625,25 +628,25 @@ function renderProb(){
   var curPnl=0;
   ops.forEach(function(t){ if(t==='win') curPnl+=gA; else if(t==='loss') curPnl-=rA; });
   var rem=5-ops.length, need=obj-curPnl;
-
+ 
   var cpEl=document.getElementById('p-cur');
   cpEl.textContent=(curPnl>=0?'+':'')+' $'+curPnl.toFixed(0);
   cpEl.style.color=curPnl>=0?'#1D9E75':'#E24B4A';
-
+ 
   var nEl=document.getElementById('p-need');
   nEl.textContent=need<=0?'¡Logrado!':'$'+need.toFixed(0);
   nEl.style.color=need<=0?'#1D9E75':'var(--text-primary)';
-
+ 
   document.getElementById('p-rem').textContent=rem;
-
+ 
   // mirror ops
   renderOpsIn('ops-display-prob', false);
-
+ 
   var grid=document.getElementById('prob-grid');
   var ft=document.getElementById('prob-ft');
   var msg=document.getElementById('prob-msg');
   grid.innerHTML=''; ft.textContent='';
-
+ 
   if(ops.length>=5){
     msg.textContent=curPnl>=obj?'Objetivo alcanzado. P&L final: +$'+curPnl.toFixed(0)+'.':'Día completo. P&L final: '+(curPnl>=0?'+':'')+' $'+curPnl.toFixed(0)+'.';
     msg.style.color=curPnl>=obj?'#1D9E75':'#E24B4A';
@@ -651,17 +654,17 @@ function renderProb(){
     return;
   }
   document.getElementById('prob-combos-title').style.display='';
-
+ 
   if(need<=0){
     msg.textContent='Objetivo $'+obj.toFixed(0)+' alcanzado con +$'+curPnl.toFixed(0)+'. Podés parar o seguir.';
     msg.style.color='#1D9E75'; return;
   }
-
+ 
   // build combos
   var types=['win','loss','be'], combos=[];
   function bc(cur){ if(cur.length===rem){combos.push(cur.slice());return;} types.forEach(function(t){cur.push(t);bc(cur);cur.pop();}); }
   bc([]);
-
+ 
   var seen={}, uniq=[];
   combos.forEach(function(c){
     var w=c.filter(function(x){return x==='win';}).length;
@@ -677,10 +680,10 @@ function renderProb(){
   var tp=0; uniq.forEach(function(c){tp+=c.prob;});
   var rt=0; uniq.forEach(function(c){c.prob=c.prob/tp; if(c.pnl>=obj) rt+=c.prob;});
   uniq.sort(function(a,b){return b.pnl-a.pnl;});
-
+ 
   msg.textContent='Con '+rem+' op'+(rem>1?'s':'')+' restante'+(rem>1?'s':'')+', la probabilidad de alcanzar $'+obj.toFixed(0)+' hoy es del '+Math.round(rt*100)+'%.';
   msg.style.color=rt>=0.4?'#1D9E75':rt>=0.2?'#BA7517':'#E24B4A';
-
+ 
   uniq.forEach(function(c){
     var reaches=c.pnl>=obj, div=document.createElement('div');
     div.className='cc '+(reaches?'reach':'nope');
@@ -696,42 +699,42 @@ function renderProb(){
   });
   ft.textContent='Verde = alcanza $'+obj.toFixed(0)+'. Rojo = no alcanza. Win rate usado: '+Math.round(wr*100)+'%.';
 }
-
+ 
 // ─── CALENDAR ────────────────────────────────────
 function calPrev(){ calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
 function calNext(){ calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
-
+ 
 function renderCalendar(){
   document.getElementById('cal-title').textContent = MONTHS_ES[calMonth]+' '+calYear;
-
+ 
   var grid=document.getElementById('cal-grid');
   grid.innerHTML='';
-
+ 
   var firstDay=new Date(calYear, calMonth, 1).getDay();
   var daysInMonth=new Date(calYear, calMonth+1, 0).getDate();
-
+ 
   var today=new Date();
   var todayKey=today.getFullYear()+'-'+pad(today.getMonth()+1)+'-'+pad(today.getDate());
-
+ 
   // empty leading cells
   for(var e=0;e<firstDay;e++){
     var emp=document.createElement('div'); emp.className='dc dc-empty'; grid.appendChild(emp);
   }
-
+ 
   var moPnl=0, moDays=0, moWins=0, moTotal=0, moBest=-Infinity;
-
+ 
   for(var d=1;d<=daysInMonth;d++){
     var key=calYear+'-'+pad(calMonth+1)+'-'+pad(d);
     var rec=tradeHistory[key]||null;
     var isToday=(key===todayKey);
     var dow=new Date(calYear,calMonth,d).getDay();
     var isWeekend=(dow===0||dow===6);
-
+ 
     var cell=document.createElement('div');
     var cls='dc';
     if(isToday) cls+=' dc-today';
     else if(isWeekend && !rec) cls+=' dc-weekend';
-
+ 
     if(rec){
       moDays++;
       moPnl+=rec.pnl;
@@ -743,10 +746,10 @@ function renderCalendar(){
       else               cls+=' dc-be';
     }
     cell.className=cls;
-
+ 
     // number
     var inner='<div class="dc-num">'+d+'</div>';
-
+ 
     if(rec){
       var sign=rec.pnl>=0?'+':'';
       var pnlColor=rec.pnl>0?'#1D9E75':rec.pnl<0?'#E24B4A':'#BA7517';
@@ -760,11 +763,11 @@ function renderCalendar(){
     } else if(isToday){
       inner+='<div style="font-size:10px;color:var(--tab-color);margin-top:6px;font-weight:500">Hoy</div>';
     }
-
+ 
     cell.innerHTML=inner;
     grid.appendChild(cell);
   }
-
+ 
   // month summary
   document.getElementById('mo-days').textContent=moDays;
   var mpEl=document.getElementById('mo-pnl');
@@ -773,7 +776,7 @@ function renderCalendar(){
   document.getElementById('mo-wr').textContent=moTotal>0?Math.round(moWins/moTotal*100)+'%':'—';
   document.getElementById('mo-best').textContent=moBest>-Infinity?'+$'+Math.round(moBest):'—';
 }
-
+ 
 // ─── OVERVIEW CALC ───────────────────────────────
 function calcOv(){
   var sl=parseFloat(document.getElementById('o-sl').value);
@@ -797,7 +800,7 @@ function calcOv(){
   document.getElementById('ov-bar').style.background=ev>=0?'#1D9E75':'#E24B4A';
   document.getElementById('ov-ppos').textContent='~'+pp+'%';
 }
-
+ 
 // ─── MONTHLY PROJECTION ──────────────────────────
 function calcMo(){
   var ev    = parseFloat(document.getElementById('m-ev').value);
@@ -808,19 +811,19 @@ function calcMo(){
   document.getElementById('m-days-o').textContent  = days;
   document.getElementById('m-var-o').textContent   = '$'+vari.toFixed(0);
   document.getElementById('m-mo-o').textContent    = mos;
-
+ 
   var mev   = ev * days;
   var mpct  = mev / CAPITAL * 100;
   document.getElementById('m-mev').textContent  = '$'+Math.round(mev).toLocaleString();
   document.getElementById('m-mpct').textContent = mpct.toFixed(1)+'%';
-
+ 
   var tbody = document.getElementById('mo-tbody');
   tbody.innerHTML = '';
   var cap = CAPITAL;
   var now = new Date();
   var y = now.getFullYear(), m = now.getMonth();
   var MONTHS_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-
+ 
   for(var i=0;i<mos;i++){
     var mn   = MONTHS_SHORT[(m+i)%12] + ' ' + (y + Math.floor((m+i)/12));
     var ini  = cap;
@@ -842,8 +845,8 @@ function calcMo(){
   }
   document.getElementById('m-final').textContent = '$'+Math.round(cap).toLocaleString();
 }
-
-
+ 
+ 
 </script>
 </body>
 </html>
